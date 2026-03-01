@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Diagnostics.Eventing.Reader;
 using System.Windows;
+// Tools → NuGet Package Manager → Package Manager Console
+// Install-Package MathNet.Numerics
 using MathNet.Numerics.LinearAlgebra;
 
 namespace lab2
