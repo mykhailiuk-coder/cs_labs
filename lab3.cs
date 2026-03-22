@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace lab3
 {
@@ -68,6 +69,38 @@ namespace lab3
         public int getCentury()
         {
             return (Year + 99) / 100;
+        }
+
+        //Lab 4(task 1)
+        public Date this[int daysToAdd]
+        {
+            get
+            {
+                DateTime current = new DateTime(Year, Month, Day);
+                DateTime result = current.AddDays(daysToAdd);
+                return new Date(result.Day, result.Month, result.Year);
+            }
+        }
+
+        public static bool operator !(Date d)
+        {
+            int[] daysInMonth = { 31, (d.Year % 4 == 0 && d.Year % 100 != 0) || (d.Year % 400 == 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+            return d.Day < daysInMonth[d.Month - 1];
+        }
+
+        public static bool operator true(Date d)
+        {
+            return d.Day == 1 && d.Month == 1;
+        }
+
+        public static bool operator false(Date d)
+        {
+            return d.Day != 1 || d.Month != 1;
+        }
+
+        public static bool operator &(Date d1, Date d2)
+        {
+            return d1.Day == d2.Day && d1.Month == d2.Month && d1.Year == d2.Year;
         }
     }
 
@@ -159,6 +192,7 @@ namespace lab3
                         Console.WriteLine($"Date 2: {date2.ToFormatString()}");
                         Console.WriteLine($"Number of days between {date1} and {date2}: {date1.GetNumberBetween(date2)}");
                         Console.WriteLine($"Century of {date3}: {date3.getCentury()}");
+                        Console.WriteLine($"Is date1 equal to date2? {date1 & date2}");
 
                         Date[] dateArray = { date1, date2, date3 };
                         Date.SortDates(dateArray);
