@@ -42,18 +42,24 @@ public class Lab2
         return M;
     }
 
-    public static int[] GetSumOfElementsInRange(int[][] matrix, int n, int k1, int k2)
+    public static int[] GetSumOfElementsInRange(int[][] matrix, int k1, int k2)
     {
-        if (k1 < 0 || k1 >= k2)
+        if (matrix == null) throw new ArgumentNullException(nameof(matrix));
+
+        if (k1 < 0 || k1 > k2)
         {
-            throw new ArgumentException($"Invalid column range: {k1} to {k2}. Matrix has columns.");
+            throw new ArgumentException($"Некоректний діапазон: k1={k1}, k2={k2}.");
         }
 
-        int[] sums = new int[n];
+        int[] sums = new int[matrix.Length];
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < matrix.Length; i++)
         {
-            for (int j = k1; j <= k2; j++)
+            if (matrix[i] == null) continue;
+            int start = k1;
+            int end = Math.Min(k2, matrix[i].Length - 1);
+
+            for (int j = start; j <= end; j++)
             {
                 sums[i] += matrix[i][j];
             }
@@ -116,7 +122,6 @@ public class Program
                 case 4:
                     Console.WriteLine("Input n: ");
                     int n2 = int.Parse(Console.ReadLine()!);
-                    
                     Console.WriteLine("Input k1: ");
                     int k1 = int.Parse(Console.ReadLine()!);
                     Console.WriteLine("Input k2: ");
@@ -129,9 +134,8 @@ public class Program
                     }
                     try
                     {
-                        int[] sums = Lab2.GetSumOfElementsInRange(matrix2, n2, k1, k2);
+                        int[] sums = Lab2.GetSumOfElementsInRange(matrix2, k1, k2);
                         Console.WriteLine("Sum of elements in each row: " + string.Join(", ", sums));
-
                     }
                     catch (ArgumentException ex)
                     {
