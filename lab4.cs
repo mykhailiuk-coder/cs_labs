@@ -1,3 +1,4 @@
+using lab4;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,96 +12,239 @@ namespace lab4
         protected byte[] BArray;
         protected uint n { get; }
         protected int codeError { get; set; }
-        protected static uint num_vec = 0;
+        protected static uint num_vec;
 
         public VectorByte()
         {
-            this.BArray = new byte[1];
-            this.BArray[0] = 0;
+            BArray = new byte[1] { 0 };
+            n = 1;
+            codeError = 0;
             num_vec++;
         }
-        public VectorByte(uint n)
+
+        public VectorByte(uint size)
         {
-            this.n = n;
-            this.BArray = new byte[n];
-            for (int i = 0; i < n; i++)
-                this.BArray[i] = 0;
+            BArray = new byte[size];
+            n = size;
+            codeError = 0;
             num_vec++;
         }
-        public VectorByte(uint n, byte value)
+
+        public VectorByte(uint size, byte value)
         {
-            this.n = n;
-            this.BArray = new byte[n];
-            for (int i = 0; i < n; i++)
-                this.BArray[i] = value;
+            BArray = new byte[size];
+            for (int i = 0; i < size; i++) BArray[i] = value;
+            n = size;
+            codeError = 0;
             num_vec++;
         }
+
         ~VectorByte()
         {
-            Console.WriteLine("Destructor called for VectorByte");
+            Console.WriteLine("VectorByte object destroyed");
         }
-        public void inputValues()
+
+        public void Input()
         {
-            Console.WriteLine("Enter the number of elements:");
-            this.BArray = new byte[this.n];
-            Console.WriteLine("Enter the elements:");
-            for (int i = 0; i < this.n; i++)
-                this.BArray[i] = byte.Parse(Console.ReadLine());
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"[{i}] = ");
+                BArray[i] = byte.Parse(Console.ReadLine());
+            }
         }
-        public void outputValues()
+
+        public void Print()
         {
-            for (int i = 0; i < this.n; i++)
-                Console.Write(this.BArray[i] + " ");
+            for (int i = 0; i < n; i++) Console.Write(BArray[i] + " ");
+            Console.WriteLine();
         }
+
         public void setValue(byte value)
         {
             for (int i = 0; i < this.n; i++)
-                this.BArray[i] = value;
-        }
-        public static void showNumVec()
-        {
-            Console.WriteLine("Number of VectorByte instances: " + num_vec);
-        }
-        public int this[int index]
-        {
-            get 
             {
-                return 0;
+                BArray[i] = value;
+            }
+        }
+
+        static public int GetNumVec() => (int)num_vec; 
+
+        public uint Size => n;
+        public int ErrorCode { get => codeError; set => codeError = value; }
+
+        public byte this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= n) { codeError = 1; return 0; }
+                return BArray[index];
             }
             set
             {
-                if (index < 0 || index > this.n) 
-                {
-                    this.codeError = 1;
-                }
+                if (index < 0 || index >= n) codeError = 1;
+                else BArray[index] = value;
             }
         }
-        public static VectorByte operator++(VectorByte vec)
+
+        public static VectorByte operator ++(VectorByte v)
         {
-            for (int i = 0; i < vec.n; i++)
-                vec.BArray[i]++;
-            return vec;
+            for (int i = 0; i < v.n; i++) v.BArray[i]++;
+            return v;
         }
-        public static bool operator true(VectorByte vec)
+
+        public static VectorByte operator --(VectorByte v)
         {
-            bool result = true;
-            if (vec.n != 0)
-                return true;
-            for (int i = 0; i < vec.n; i++) 
-            { 
-                if (vec.BArray[i] == 0)
-                    result = false;
-            }
-            return result;
+            for (int i = 0; i < v.n; i++) v.BArray[i]--;
+            return v;
         }
-}
+
+        public static bool operator true(VectorByte v) => v.n != 0;
+        public static bool operator false(VectorByte v) => v.n == 0;
+        public static bool operator !(VectorByte v) => v.n != 0;
+
+        public static VectorByte operator +(VectorByte v1, VectorByte v2)
+        {
+            uint max = Math.Max(v1.n, v2.n);
+            VectorByte res = new VectorByte(max);
+            for (int i = 0; i < Math.Min(v1.n, v2.n); i++) res[i] = (byte)(v1[i] + v2[i]);
+            return res;
+        }
+
+        public static VectorByte operator +(VectorByte v, byte s)
+        {
+            VectorByte res = new VectorByte(v.n);
+            for (int i = 0; i < v.n; i++) res[i] = (byte)(v[i] + s);
+            return res;
+        }
+
+        public static VectorByte operator -(VectorByte v1, VectorByte v2)
+        {
+            uint max = Math.Max(v1.n, v2.n);
+            VectorByte res = new VectorByte(max);
+            for (int i = 0; i < Math.Min(v1.n, v2.n); i++) res[i] = (byte)(v1[i] - v2[i]);
+            return res;
+        }
+
+        public static VectorByte operator -(VectorByte v, byte s)
+        {
+            VectorByte res = new VectorByte(v.n);
+            for (int i = 0; i < v.n; i++) res[i] = (byte)(v[i] - s);
+            return res;
+        }
+
+        public static VectorByte operator *(VectorByte v1, VectorByte v2)
+        {
+            uint max = Math.Max(v1.n, v2.n);
+            VectorByte res = new VectorByte(max);
+            for (int i = 0; i < Math.Min(v1.n, v2.n); i++) res[i] = (byte)(v1[i] * v2[i]);
+            return res;
+        }
+
+        public static VectorByte operator *(VectorByte v, byte s)
+        {
+            VectorByte res = new VectorByte(v.n);
+            for (int i = 0; i < v.n; i++) res[i] = (byte)(v[i] * s);
+            return res;
+        }
+
+        public static VectorByte operator /(VectorByte v1, VectorByte v2)
+        {
+            uint max = Math.Max(v1.n, v2.n);
+            VectorByte res = new VectorByte(max);
+            for (int i = 0; i < Math.Min(v1.n, v2.n); i++) res[i] = v2[i] != 0 ? (byte)(v1[i] / v2[i]) : (byte)0;
+            return res;
+        }
+
+        public static VectorByte operator /(VectorByte v, byte s)
+        {
+            VectorByte res = new VectorByte(v.n);
+            for (int i = 0; i < v.n; i++) res[i] = s != 0 ? (byte)(v[i] / s) : (byte)0;
+            return res;
+        }
+
+        public static bool operator ==(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return false;
+            for (int i = 0; i < v1.n; i++) if (v1[i] != v2[i]) return false;
+            return true;
+        }
+
+        public static bool operator !=(VectorByte v1, VectorByte v2) => !(v1 == v2);
+
+        public static bool operator >(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return false;
+            for (int i = 0; i < v1.n; i++) if (v1[i] <= v2[i]) return false;
+            return true;
+        }
+
+        public static bool operator <(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return false;
+            for (int i = 0; i < v1.n; i++) if (v1[i] >= v2[i]) return false;
+            return true;
+        }
+
+        public static bool operator >=(VectorByte v1, VectorByte v2) => (v1 > v2) || (v1 == v2);
+
+        public static bool operator <=(VectorByte v1, VectorByte v2) => (v1 < v2) || (v1 == v2);
+
+        public static bool operator |(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return false;
+            for (int i = 0; i < v1.n; i++) if (v1[i] != 0 && v2[i] != 0) return true;
+            return false;
+        }
+
+        public static bool operator ^(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return false;
+            for (int i = 0; i < v1.n; i++) if ((v1[i] != 0) ^ (v2[i] != 0)) return true;
+            return false;
+        }
+    }
+
+    struct InfoStruct
+    {
+        public string Medium;
+        public double Volume;
+        public string Name;
+        public string Author;
+    }
+
     public class Program
     {
         static void Main(string[] args)
         {
-            VectorByte vec1 = new VectorByte();
-            VectorByte vec2 = new VectorByte();
-            VectorByte.showNumVec();
+            VectorByte v1 = new VectorByte(5, 10);
+            VectorByte v2 = new VectorByte(5, 20);
+            Console.WriteLine("v1: ");
+            v1.Print();
+            Console.WriteLine("v2: ");
+            v2.Print();
+            Console.WriteLine("v1 + v2: ");
+            (v1 + v2).Print();
+            Console.WriteLine("v1 * 2: ");
+            (v1 * 2).Print();
+            Console.WriteLine($"Number of vectors: {VectorByte.GetNumVec()}");
+
+            List<InfoStruct> listStruct = new List<InfoStruct>();
+
+            List<(string Medium, double Volume, string Name, string Author)> listTuples = new List<(string Medium, double Volume, string Name, string Author)> { };
+            listTuples.Add(("USB", 16.0, "Data1", "Author A"));
+            listTuples.Add(("HDD", 500.0, "Data2", "Author B"));
+
+            double targetVol = 16.0;
+            var toRemove = listTuples.FirstOrDefault(x => x.Volume == targetVol);
+            listTuples.Remove(toRemove);
+
+            int targetIndex = 1;
+            listTuples.Insert(targetIndex - 1, ("SSD", 256.0, "NewData", "Author C"));
+
+            for (int i = 0; i < listTuples.Count; i++)
+            {
+                Console.WriteLine($"Medium: {listTuples[i].Medium}, Volume: {listTuples[i].Volume}, Name: {listTuples[i].Name}, Author: {listTuples[i].Author}");
+            }
         }
     }
 }
