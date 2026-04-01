@@ -6,9 +6,31 @@ using System.Threading.Tasks;
 
 namespace lab5
 {
-    sealed partial class Partial_Realisation
+    sealed partial class VectorByte
     {
-        static void Main(string[] args) 
+        partial void Input()
+        {
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"[{i}] = ");
+                BArray[i] = byte.Parse(Console.ReadLine());
+            }
+        }
+        partial void Print()
+        {
+            for (int i = 0; i < n; i++) Console.Write(BArray[i] + " ");
+            Console.WriteLine();
+        }
+
+        partial void setValue(byte value)
+        {
+            for (int i = 0; i < n; i++) BArray[i] = value;
+        }
+    }
+
+    public class Program
+    {
+        static void Main(string[] args)
         {
             VectorByte v1 = new VectorByte(5, 10);
             VectorByte v2 = new VectorByte(5, 20);
