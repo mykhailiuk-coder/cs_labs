@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// open .csproj file and change <LangVersion> to latest in the first <PropertyGroup>, or add it if it doesn't exist
+// <LangVersion>latest</LangVersion>
 namespace lab5
 {
     public sealed partial class VectorByte
