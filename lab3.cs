@@ -183,26 +183,38 @@ namespace lab3
                 switch (task)
                 {
                     case 1:
-                        Date date1 = new Date(29, 02, 2021);
+                        Date date1 = new Date(28, 02, 2021);
                         Date date2 = new Date(20, 02, 2021);
                         Date date3 = new Date(31, 04, 1921);
+                        Date date4 = new Date(01, 01, 2021);
 
-                        Console.WriteLine($"Is {date1} valid? {date1.IsDateValid()}");
-                        Console.WriteLine($"Date 2: {date2}");
-                        Console.WriteLine($"Date 2: {date2.ToFormatString()}");
-                        Console.WriteLine($"Number of days between {date1} and {date2}: {date1.GetNumberBetween(date2)}");
-                        Console.WriteLine($"Century of {date3}: {date3.getCentury()}");
-                        Console.WriteLine($"Is date1 equal to date2? {date1 & date2}");
+                        Console.WriteLine(date1.ToString());
+                        Console.WriteLine(date2.ToString());
+                        Console.WriteLine(date3.ToString());
 
-                        Date[] dateArray = { date1, date2, date3 };
-                        Date.SortDates(dateArray);
+                        Console.WriteLine(date2[3].ToString());
+                        Console.WriteLine($"Is {date1.ToString()} last of the month? {!date1}");
 
-                        Console.WriteLine("\nSorted array:");
-                        foreach (var d in dateArray)
+                        if (date4)
                         {
-                            Console.WriteLine(d);
+                            Console.WriteLine($"{date4.ToString()} is the first day of the month!");
                         }
-                        Console.WriteLine("\n");
+                        else
+                        {
+                            Console.WriteLine("It's not the first day of the month.");
+                        }
+
+                        if (date3)
+                        {
+                            Console.WriteLine($"{date3.ToString()} is the first day of the month!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("It's not the first day of the month.");
+                        }
+
+                        Console.WriteLine($"Are {date1.ToString()} and {date2.ToString()} equal? {date1 & date2}");
+
                         break;
                     case 2:
                         Document doc1 = new Document("The Great Gatsby", "F. Scott Fitzgerald", new Date(10, 04, 1925));
@@ -216,7 +228,7 @@ namespace lab3
                         Console.WriteLine(receipt1.ToString());
                         break;
                     default:
-                        Console.WriteLine("Invalid task number. Please enter a number between 1 and 3.");
+                        Console.WriteLine("Invalid task number. Please enter a number between 1 and 2.");
                         break;
                 }
             }
