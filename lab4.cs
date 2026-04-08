@@ -67,7 +67,7 @@ namespace lab4
             }
         }
 
-        static public int GetNumVec() => (int)num_vec; 
+        static public uint GetNumVec() => num_vec;
 
         public uint Size => n;
         public int ErrorCode { get => codeError; set => codeError = value; }
@@ -196,21 +196,64 @@ namespace lab4
             return false;
         }
 
+        public static bool operator |(VectorByte v, byte s)
+        {
+            if (s == 0) return false;
+            for (int i = 0; i < v.n; i++) if (v[i] != 0) return true;
+            return false;
+        }
+
         public static bool operator ^(VectorByte v1, VectorByte v2)
         {
             if (v1.n != v2.n) return false;
             for (int i = 0; i < v1.n; i++) if ((v1[i] != 0) ^ (v2[i] != 0)) return true;
             return false;
         }
-    }
 
-    struct InfoStruct
-    {
-        public string Medium;
-        public double Volume;
-        public string Name;
-        public string Author;
-    }
+        public static bool operator ^(VectorByte v, byte s)
+        {
+            if (s == 0) return false;
+            for (int i = 0; i < v.n; i++) if ((v[i] != 0) ^ (s != 0)) return true;
+            return false;
+        }
+
+        public static VectorByte operator >>(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return new VectorByte(0);
+            VectorByte res = new VectorByte(v1.n);
+            for (int i = 0; i < v1.n; i++) res[i] = (byte)(v1[i] > v2[i] ? 1 : 0);
+            return res;
+        }
+
+        public static VectorByte operator >>(VectorByte v, byte s)
+        {
+            VectorByte res = new VectorByte(v.n);
+            for (int i = 0; i < v.n; i++) res[i] = (byte)(v[i] > s ? 1 : 0);
+            return res;
+        }
+
+        public static VectorByte operator <<(VectorByte v1, VectorByte v2)
+        {
+            if (v1.n != v2.n) return new VectorByte(0);
+            VectorByte res = new VectorByte(v1.n);
+            for (int i = 0; i < v1.n; i++) res[i] = (byte)(v1[i] < v2[i] ? 1 : 0);
+            return res;
+        }
+
+        public static VectorByte operator <<(VectorByte v, byte s)
+        {
+            VectorByte res = new VectorByte(v.n);
+            for (int i = 0; i < v.n; i++) res[i] = (byte)(v[i] < s ? 1 : 0);
+            return res;
+        }
+
+        struct InfoStruct
+        {
+            public string Medium;
+            public double Volume;
+            public string Name;
+            public string Author;
+        }
 
     public class Program
     {
@@ -237,7 +280,6 @@ namespace lab4
             double targetVol = 16.0;
             var toRemove = listTuples.FirstOrDefault(x => x.Volume == targetVol);
             listTuples.Remove(toRemove);
-
             int targetIndex = 1;
             listTuples.Insert(targetIndex - 1, ("SSD", 256.0, "NewData", "Author C"));
 
